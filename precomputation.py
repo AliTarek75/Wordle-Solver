@@ -25,10 +25,10 @@ def pattern_code(guess, target):
 
 if __name__ == "__main__":
 
-    with open('dictionary_5_letter.json', 'r') as f:
+    with open('words_json/dictionary_5_letter.json', 'r') as f:
         guesses = json.load(f)  # Size G
         
-    with open('targets_5_letter.json', 'r') as f:
+    with open('words_json/targets_5_letter.json', 'r') as f:
         targets = json.load(f)  # Size A
 
     G = len(guesses)
