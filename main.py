@@ -1,5 +1,7 @@
 import json
 import numpy as np
+import time
+import sys
 
 values = {
     "r": 0,
@@ -28,15 +30,31 @@ def pattern_code_to_str(code):
 
     return ''.join(str_list)
 
-def best_guess(C, Matrix_Offset, lookup, N):
-    L = len(C)
+def row_entropy(row):
     
-    # Advanced indexing extracts the columns, and ravel() flattens it instantly 
-    # without doing any math operations on the massive array.
-    flat_counts = np.bincount(Matrix_Offset[:, C].ravel(), minlength=N * 243)
-    counts = flat_counts.reshape(N, 243)
+    _, counts = np.unique(row, return_counts=True)
+    probs = counts / len(row)
+
+    entropies = np.log2(probs) * probs
     
-    # Direct array mapping instead of float math
-    entropies = np.log2(L) - lookup[counts].sum(axis=1) / L
-    
-    return np.argmax(entropies)
+    return - np.sum(entropies)
+
+def pattern_is_valid(pattern):
+    allowed = {'r', 'g', 'y'}
+    return len(pattern) == 5 and all(char in allowed for char in pattern)
+
+def get_input(prompt_text):
+    if sys.stdout.isatty():
+        return input(prompt_text)
+    else:
+        return input()
+
+def best_guess(Matrix, C):
+
+    entropies = [row_entropy(np.array(row)) for row in Matrix[:, C]]
+
+    best_guesses = np.argsort(entropies)[::-1][:10]
+    best_entropies = np.sort(entropies)[::-1][10:]
+
+    return [best_guesses, best_entropies]
+
