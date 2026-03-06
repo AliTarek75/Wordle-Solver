@@ -1,4 +1,4 @@
-from utils import *
+from main import pattern_str_to_code
 import json
 import numpy as np
 
