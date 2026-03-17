@@ -1,8 +1,11 @@
 # Information-Theoretic Wordle Solver
 
-A Python-based Wordle solver that uses Entropy to find the mathematically optimal guess. Instead of relying on heuristic word lists, this solver calculates the expected information gain for every possible word across all remaining valid targets, and then narrows down the search space until only one guess remains in the fewest turns possible.
+A Python-based Wordle solver that uses information theory (entropy) to find the mathematically optimal guess. Instead of relying on heuristic word lists, this solver calculates the expected information gain for every possible word across all remaining valid targets, and then narrows down the search space until only one guess remains in the fewest turns possible. It consistently solves a Wordle in 3 to 4 guesses on average.
 
-
+## How It Works
+   - A matrix is generated mapping every guess to every possible target with each entry stores the resulting Wordle feedback encoded in base-3.
+   - For a given guess, the solver computes the distribution of feedback patterns across all remaining possible answers. It then calculates the entropy of this distribution.
+   - The solver then evaluates all possible guesses and selects the one with the highest expected information gain.
 
 ## Requirements
 * **Python 3.x**
@@ -11,7 +14,7 @@ A Python-based Wordle solver that uses Entropy to find the mathematically optima
 
 
 ## Setup
-The solver relies on a precomputed pattern matrix (`matrix.npy`) to perform fast calculations.
+The solver relies on a precomputed pattern matrix (`matrix.npy`) to perform fast calculations and avoid recomputing feedback patterns.
 
 If `matrix.npy` is not already in the repository, you can generate it locally:
 1. Ensure the two dictionary files (`targets_5_letter.json` and `dictionary_5_letter.json`) are located in the `words_json/` directory.
